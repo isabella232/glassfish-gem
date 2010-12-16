@@ -73,6 +73,8 @@ import java.util.logging.SimpleFormatter;
  * @author Vivek Pandey
  */
 public class GlassFishMain {
+    
+    private static FileHandler fh;
 
     private static void startGlassFishEmbedded(Options options) {
 
@@ -93,8 +95,12 @@ public class GlassFishMain {
                 logFile.getParentFile().mkdirs();
                 logFile.createNewFile();
             }
-
-            FileHandler fh = new FileHandler(options.log, true);
+            
+            if (options.log_limit > 0) {
+                fh = new FileHandler(options.log + ".%g", options.log_limit, options.log_file_count, true);
+            } else {
+                fh = new FileHandler(options.log, true);
+            }
             fh.setFormatter(new SimpleFormatter());
             root.addHandler(fh);
         } catch (IOException e) {

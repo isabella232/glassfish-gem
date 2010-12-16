@@ -67,6 +67,8 @@ module GlassFish
       [ '--pid', '-P', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--log', '-l', GetoptLong::OPTIONAL_ARGUMENT ],
       [ '--log-level', GetoptLong::REQUIRED_ARGUMENT ],
+      [ '--log-limit', GetoptLong::REQUIRED_ARGUMENT ],
+      [ '--log-file-count', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--runtimes', '-n', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--runtimes-min', GetoptLong::REQUIRED_ARGUMENT ],
       [ '--runtimes-max', GetoptLong::REQUIRED_ARGUMENT ],
@@ -114,6 +116,10 @@ module GlassFish
           else
             config[:log_level] = org.glassfish.scripting.gem.Options::LogLevel.value_of(arg.to_s.upcase).ordinal
           end
+        when '--log-limit'
+          config[:log_limit] = arg.to_i
+        when '--log-file-count'
+          config[:log_file_count] = arg.to_i
         when '--config'
           config_file = arg
         end
@@ -172,6 +178,13 @@ module GlassFish
           else
             config[:log_level] = org.glassfish.scripting.gem.Options::LogLevel.value_of(val.to_s.upcase).ordinal
           end
+          
+          val = arg['log-limit']
+          config[:log_limit] = val.to_i
+          
+          val = arg['log-file-count']
+          config[:log_file_count] = val.to_i == 0 ? Config::LOG_FILE_COUNT_DEFAULT : val.to_i
+          
         when 'jruby-runtime-pool'
           config[:runtimes] = arg['initial'] unless arg['initial'].nil?
           config[:runtimes_min] = arg['min'] unless arg['min'].nil?

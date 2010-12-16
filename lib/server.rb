@@ -92,6 +92,8 @@ module GlassFish
       @opts.log_console = args[:log_console]
       @opts.domainDir = args[:domain_dir]
       @opts.log_level = Options::LogLevel.values()[args[:log_level]]
+      @opts.log_limit = args[:log_limit]
+      @opts.log_file_count = args[:log_file_count]
       @opts.jvm_opts = args[:jvm_options]
       
       unless args[:grizzly_config].nil?

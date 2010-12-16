@@ -55,6 +55,8 @@ public class Options{
     public String log;
     public boolean log_console;
     public LogLevel log_level;
+    public int log_limit = 0;
+    public int log_file_count;
     public String domainDir;
     public String jvm_opts;
     public IRubyObject app;
@@ -80,6 +82,8 @@ public class Options{
                 .append("\n\t").append("log: ").append(log)
                 .append("\n\t").append("log to console: ").append(log_console)
                 .append("\n\t").append("log level: ").append(log_level.toString().toLowerCase())
+                .append("\n\t").append("log file size limit").append(log_limit)
+                .append("\n\t").append("log file count").append(log_file_count)
                 .append("\n\t").append("JVM options: ").append(jvm_opts)
                 .append("\n\t").append("domain dir: ").append(domainDir)
                 .append("\n\t").append(grizzlyConfig).toString();

@@ -45,6 +45,8 @@ module GlassFish
     LOG_LEVELS = (0..7)
     PID_FILE = Dir.pwd+File::SEPARATOR+"tmp"+File::SEPARATOR+"pids"+File::SEPARATOR+"glassfish"
     DEFAULT_JVM_OPTS = "-server -Xmx512m -XX:MaxPermSize=192m -XX:NewRatio=2 -XX:+DisableExplicitGC -Dhk2.file.directory.changeIntervalTimer=6000";
+    
+    LOG_FILE_COUNT_DEFAULT = 7
 
     def self.init_opts
       {
@@ -60,6 +62,8 @@ module GlassFish
         :log          => nil,
         :log_console  => false,
         :log_level    => 3,
+        :log_limit    => 0,
+        :log_file_count => LOG_FILE_COUNT_DEFAULT,
         :daemon       => false,
         :jvm_options  => nil        
       }
@@ -139,6 +143,20 @@ module GlassFish
         end
         file = File.new(config[:log], "w")
         file.close
+      end
+      
+      config[:log_limit] = config[:log_limit].to_i
+      if (config[:log_limit] < 0 || config[:log_limit] >= 2**31)
+        puts "Log file size limit must be between 0 and 2^31-1. Disabling log rotation."
+        config[:log_limit] = 0
+      end
+      
+      if config[:log_limit] > 0
+        config[:log_file_count] = config[:log_file_count].to_i
+        if (config[:log_file_count] < 0 || config[:log_file_count] >= 2**31)
+          puts "Log file countmust be between 0 and 2^31-1. Defaulting to #{LOG_FILE_COUNT_DEFAULT}."
+          config[:log_file_count] = LOG_FILE_COUNT_DEFAULT
+        end
       end
 
 
